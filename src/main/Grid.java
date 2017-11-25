@@ -139,48 +139,14 @@ public class Grid {
 	 * @return the number of contacts
 	 */
 	public int countContacts(Monomer monomer) {
-		Monomer monomer1;
-
-		if (monomer.type != MonomerType.H)
-			return 0;
 		int count = 0;
-		int x = monomer.getX();
-		int y = monomer.getY();
-		int z = monomer.getZ();
-		if (!xEdge(x)) {
-			monomer1 = getCell(x + 1, y, z);
-			if ((GAOptimizer.debug) && (monomer1 != null)
-					&& (monomer.protein != monomer1.protein))
-				throw new RuntimeException("Two proteins on the grid\n"
-						+ monomer.protein + "\n" + monomer1.protein);
-			if ((monomer1 != null) && (monomer1 != monomer.getPrev())
-					&& (monomer1 != monomer.getNext())
-					&& (monomer1.type == MonomerType.H)){
-				count++;
+		int[] contacts = returnContacts(monomer);
+		if(contacts != null) {
+			for (int i = 0; i < contacts.length; i++) {
+				if (contacts[i] != -1){
+					count++;
+				}
 			}
-		}
-		if (!yEdge(y)) {
-			monomer1 = getCell(x, y + 1, z);
-			if ((GAOptimizer.debug) && (monomer1 != null)
-					&& (monomer.protein != monomer1.protein))
-				throw new RuntimeException("Two proteins on the grid\n"
-						+ monomer.protein + "\n" + monomer1.protein);
-			if ((monomer1 != null) && (monomer1 != monomer.getPrev())
-					&& (monomer1 != monomer.getNext())
-					&& (monomer1.type == MonomerType.H)){
-				count++;
-			}
-		}
-		if (!zEdge(z)) {
-			monomer1 = getCell(x, y, z + 1);
-			if ((GAOptimizer.debug) && (monomer1 != null)
-					&& (monomer.protein != monomer1.protein))
-				throw new RuntimeException("Two proteins on the grid\n"
-						+ monomer.protein + "\n" + monomer1.protein);
-			if ((monomer1 != null) && (monomer1 != monomer.getPrev())
-					&& (monomer1 != monomer.getNext())
-					&& (monomer1.type == MonomerType.H))
-				count++;
 		}
 		return count;
 	}
