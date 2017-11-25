@@ -15,6 +15,7 @@ public class Grid {
 	private Protein protein = null;
 	private final Dimensions dimensions;
 	private static Grid instance;
+	private int[] contacts;
 
 	/**
 	 * creates new grid of [intialSize X intialSize]
@@ -27,6 +28,7 @@ public class Grid {
 		this.dimensions = dimensions;
 		setInitialSize(initialSize);
 		grid = new Monomer[maxX - minX + 1][maxY - minY + 1][maxZ - minZ + 1];
+		this.contacts = new int[3];
 	}
 
 	public static Grid getInstance(int initialSize, Dimensions dimensions) {
@@ -247,6 +249,39 @@ public class Grid {
 		return (!found);
 	}
 
+	public int[] returnContacts(Monomer monomer) {
+		if (monomer.type != MonomerType.H) {
+			return null;
+		}
+
+		int x = monomer.getX();
+		int y = monomer.getY();
+		int z = monomer.getZ();
+
+		if (!xEdge(x)) {
+			this.contacts[0] = checkIfNeighbourExists(x + 1, y, z, monomer);
+		}
+		if (!yEdge(y)) {
+			this.contacts[1] = checkIfNeighbourExists(x, y + 1, z, monomer);
+		}
+		if (!zEdge(z)) {
+			this.contacts[2] = checkIfNeighbourExists(x, y, z + 1, monomer);
+		}
+		return this.contacts;
+	}
+
+	private int checkIfNeighbourExists(int x, int y, int z, Monomer monomer){
+		Monomer neighbour = getCell(x, y, z);
+		if ((GAOptimizer.debug) && (neighbour != null) && (monomer.protein != neighbour.protein))
+			throw new RuntimeException("Two proteins on the grid\n"
+					+ monomer.protein + "\n" + neighbour.protein);
+		if ((neighbour != null) && (neighbour != monomer.getPrev())
+				&& (neighbour != monomer.getNext())
+				&& (neighbour.type == MonomerType.H)){
+			return neighbour.getNumber();
+		}
+		return -1;
+	}
 }
 
 

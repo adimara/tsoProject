@@ -424,4 +424,8 @@ Protein extends ArrayList<Monomer> implements Comparable<Protein> {
 
 
 	public int getSize() { return size;}
+
+	public Monomer getMonomerAt(int i){
+		return this.get(i);
+	}
 }

@@ -18,7 +18,7 @@ public class MutationManager {
 	 *            the configuration class
 	 */
 	public MutationManager(MutationAlgorithm algorithm) {
-        this.algorithm = algorithm;
+		this.algorithm = algorithm;
 	}
 	
 	public int getNumOfFailures (){

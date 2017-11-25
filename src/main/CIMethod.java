@@ -19,12 +19,27 @@ public class CIMethod {
         this.updateRanges();
     }
 
-    private void updateRanges() {
-        for (int i=0; i<protein.getSize(); i++){
 
-        }
+    public void updateProtein(Protein protein){
+        this.reset();
+        this.protein = protein;
+        this.updateRanges();
     }
 
+
+    private void updateRanges() {
+        int[] neighbours;
+        for (int i=0; i < protein.getSize(); i++){
+            neighbours = this.grid.returnContacts(protein.getMonomerAt(i));
+            if(neighbours != null){
+                for(int j=0; j<neighbours.length; j++){
+                    if (neighbours[j] != -1 && neighbours[j] > i){
+                        this.addRange(i, neighbours[j]);
+                    }
+                }
+            }
+        }
+    }
 
     private void addRange(int min, int max) {
         ranges[0][endRanges] = min;
