@@ -28,7 +28,7 @@ Protein extends ArrayList<Monomer> implements Comparable<Protein> {
 	private int id;
 	private static Conformation originalConformation1 = null;
 	private static Conformation originalConformation2 = null;
-
+	private CIMethod ci;
 	/**
 	 * A temporary object will serve several methods. It is intended to save the
 	 * object creation time for frequently used methods. it is expected that
@@ -66,7 +66,8 @@ Protein extends ArrayList<Monomer> implements Comparable<Protein> {
 		}
 		if (createFlag) 
 			initiateRandomConformation();
-		
+
+		this.ci = new CIMethod(this);
 	}
 	
 	public Conformation getConformation() {
